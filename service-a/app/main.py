@@ -4,12 +4,6 @@ from routes import router
 
 app = FastAPI()
 
-@app.get('/')
-def healthy():
-    return {
-        'message': 'ok'
-    }
-
 app.include_router(router)
 
 if __name__ == '__main__':
