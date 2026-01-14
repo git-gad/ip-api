@@ -2,7 +2,7 @@ import requests
 
 URL = 'http://ip-api.com/json/'
 FIELDS = 'lat,lon'
-API_URI = 'http://redis-api:8080'
+API_URI = 'http://service-b-api:8000'
 
 def get_ip_coordinates(ip):
     response = requests.get(f'{URL}{ip.ip}?fields={FIELDS}')

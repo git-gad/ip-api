@@ -1,6 +1,9 @@
 import time
 import redis
+import os
 
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
 def get_redis_connection():
     max_retries = 5
@@ -9,9 +12,9 @@ def get_redis_connection():
     for attempt in range(max_retries):
         try:
             r = redis.Redis(
-                host='redis',
-                port=6379, 
-                decode_responses=True
+            host=REDIS_HOST,
+            port=REDIS_PORT,
+            decode_responses=True
             )
             return r
         except redis.ConnectionError as e:
@@ -27,11 +30,6 @@ def save_to_db(data: dict):
     r.rpush('items:ids',item_id)
     
     return item_id
-
-# def get_all_items():
-#     r = get_redis_connection()
-#     ids = r.lrange("items:ids", 0, -1)
-#     return [r.hgetall(f"item:{i}") for i in ids]
 
 def get_all_items():
     r = get_redis_connection()

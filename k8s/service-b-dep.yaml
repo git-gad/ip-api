@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-b-api
+  labels:
+    app: service-b-api
+spec:
+  replicas: 2
+  
+  selector:
+    matchLabels:
+      app: service-b-api
+  
+  template:
+    metadata:
+      labels:
+        app: service-b-api
+    spec:
+      containers:
+      - name: api
+        image: gaddock/black-coor:service-b_v1.1
+
+        command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+        
+        ports:
+        - containerPort: 8000
+          name: http
+        
+        env:
+        - name: REDIS_HOST
+          value: "redis-headless"
+        
+        - name: REDIS_PORT
+          value: "6379"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-b-api
+  labels:
+    app: service-b-api  
+spec:
+  selector:
+    app: service-b-api 
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+    protocol: TCP

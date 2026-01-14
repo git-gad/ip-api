@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a-api
+  labels:
+    app: service-a-api
+spec:
+  replicas: 2
+  
+  selector:
+    matchLabels:
+      app: service-a-api
+  
+  template:
+    metadata:
+      labels:
+        app: service-a-api
+    spec:
+      containers:
+      - name: api
+        image: gaddock/black-coor:service-a_v1
+        
+        ports:
+        - containerPort: 8000
+          name: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-a-api
+  labels:
+    app: service-a-api
+spec:
+  type: ClusterIP
+  selector:
+    app: service-a-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+    protocol: TCP
