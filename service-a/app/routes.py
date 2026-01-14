@@ -10,19 +10,24 @@ def healthy():
         'message': 'ok'
     }
 
-@router.post('/')
-def receive_coordinates(ip: IP):
-    response = get_ip_coordinates(ip)
-    return {"mess": response}
+# @router.post('/')
+# def send_ip(ip: IP):
+#     response = get_ip_coordinates(ip)
+#     return {"mess": response}
 
-@router.post('/coordinates')
-def send_coordinates(data):
-    post_to_db(data)
+@router.post('/ip')
+def send_coordinates(ip: IP):
+    coordinates = get_ip_coordinates(ip)
+    print(coordinates)
+    print(coordinates['ip'])
+    post_to_db(coordinates)
     return {
-        'mess': 'ok'
+        'data': coordinates
     }
     
 @router.get('/coordinates')
 def display_all_coordinates():
+    print(get_items, type(get_items))
     items = get_items()
+    print(items, type(items))
     return items

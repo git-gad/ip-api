@@ -28,7 +28,19 @@ def save_to_db(data: dict):
     
     return item_id
 
+# def get_all_items():
+#     r = get_redis_connection()
+#     ids = r.lrange("items:ids", 0, -1)
+#     return [r.hgetall(f"item:{i}") for i in ids]
+
 def get_all_items():
     r = get_redis_connection()
     ids = r.lrange("items:ids", 0, -1)
-    return [r.hgetall(f"item:{i}") for i in ids]
+
+    items = []
+    for item_id in ids:
+        data = r.hgetall(f"item:{item_id}")
+        if data:
+            items.append({"id": int(item_id), **data})
+
+    return items

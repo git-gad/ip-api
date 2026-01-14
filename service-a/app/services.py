@@ -6,7 +6,7 @@ API_URI = 'http://redis-api:8080'
 
 def get_ip_coordinates(ip):
     response = requests.get(f'{URL}{ip.ip}?fields={FIELDS}')
-    return {'ip': ip.ip,
+    return {'ip': str(ip),
         'coordinates': response.text
     }
     
@@ -15,5 +15,7 @@ def post_to_db(data):
     
 def get_items():
     response = requests.get(f'{API_URI}/coordinates')
-    return response
+    response.raise_for_status()
+    return response.json()
+    
     

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import os
 from dal import get_redis_connection, save_to_db, get_all_items
+from schemas import CoordinatesData
 
 router = APIRouter()
 
@@ -25,7 +26,7 @@ def redis_health_check():
         raise HTTPException(status_code=503, detail=f"Redis unavailable: {str(e)}")
     
 @router.post('/coordinates')
-def add_coordinates_to_db(data):
+def add_coordinates_to_db(data: dict):
     item_id = save_to_db(data)
     return {
         'item_id': item_id,
